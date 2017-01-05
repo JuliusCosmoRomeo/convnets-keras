@@ -1013,7 +1013,7 @@ with io.open(dataFolderLocation + "ILSVRC2012_metadata.json") as metadataFile:
 	#jsonFile = json.open(metadataFile)
 	#jsonString = jsonFile.read()
 	jsonData = json.load(metadataFile)
-	jsonDataSwapped = dict((v,k) for k,v in jsonData.iteritems())
+	jsonDataSwapped = dict((v,k) for k,v in jsonData.items())
 	metadataFile.close()
 
 imageQueue = dict()
