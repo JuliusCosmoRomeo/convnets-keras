@@ -1061,8 +1061,9 @@ for fileId in sorted(imageQueue):
 			continue		
 		categoryId = jsonDataSwapped[labelForIndex]
 		print(categoryId + " " + labelForIndex)
-		for fId in categoryDict[categoryId]:
-			files_in_top5_category.add(int(fId))
+		if categoryId in categoryDict:
+			for fId in categoryDict[categoryId]:
+				files_in_top5_category.add(int(fId))
 	if int(fileId) in files_in_top5_category:
 		print("found correct class")
 		allCorrectFiles +=1
