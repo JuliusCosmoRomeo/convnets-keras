@@ -1008,7 +1008,8 @@ Label = {0: 'tench, Tinca tinca',
  999: 'toilet tissue, toilet paper, bathroom tissue'};
 jsonData = dict()
 jsonDataSwapped = dict()
-with io.open("../ILSVRC2012_metadata.json") as metadataFile:
+dataFolderLocation = "../data/"
+with io.open(dataFolderLocation + "ILSVRC2012_metadata.json") as metadataFile:
 	#jsonFile = json.open(metadataFile)
 	#jsonString = jsonFile.read()
 	jsonData = json.load(metadataFile)
@@ -1018,7 +1019,7 @@ with io.open("../ILSVRC2012_metadata.json") as metadataFile:
 imageQueue = dict()
 categoryDict = dict()
 doc = None
-with open("../../../../../../media/sf_CNNs/ILSVRC2012.yaml") as yamlFile:
+with open(dataFolderLocation + "ILSVRC2012.yaml") as yamlFile:
 	doc = yaml.load(yamlFile)
 	
 	for cat in doc["val"]["gt"]:
@@ -1027,11 +1028,6 @@ with open("../../../../../../media/sf_CNNs/ILSVRC2012.yaml") as yamlFile:
 	for img in doc["val"]["images"]:
 		imageQueue[img] = doc["val"]["images"][img]
 	yamlFile.close()
-"""
-for img in imageQueue:
-	print(img + " " + imageQueue[img])
-print("done")
-print(doc["val"]["gt"]["n13052670"])"""
 
 #for every image
 
@@ -1043,7 +1039,7 @@ for fileId in sorted(imageQueue):
 	allClassifiedFiles += 1
 	fileName = imageQueue[fileId]
 	fileName = fileName[4:]#cut off "val/"
-	fileName = "../../../../../../media/sf_CNNs/images/" + fileName
+	fileName = dataFolderLocation + "images/" + fileName
 	print(fileId + " " + fileName)
 	im = preprocess_image_batch([fileName],img_size=(256,256), crop_size=(227,227), color_mode="rgb")
 
@@ -1055,11 +1051,6 @@ for fileId in sorted(imageQueue):
 	out = model.predict(im)
 
 
-	"""
-	for instance in out:
-		instance = sorted(instance)
-		for inst in instance:
-			print(inst)"""
 	top5_indices = out[0].argsort()[-5:][::-1]
 	files_in_top5_category = set()
 	for index in top5_indices:	
@@ -1085,10 +1076,4 @@ for fileId in sorted(imageQueue):
 	print("time for last img " + str(datetime.datetime.now()-time))
 
 print("Top 5 error rate " + str(1 - double(allCorrectFiles/allClassifiedFiles)))
-"""for catId in categoryDict:
-	if fileId in categoryDict[catId]:
-		print("correct class would have been " + str(jsonData[catId]) + " " + str(catId))
-		correctCatFound = True
-		break;
-if  not correctCatFound:
-	print("correct class not found")"""
+
